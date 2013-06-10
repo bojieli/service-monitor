@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>ServMon@LUG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="boj">
+    <!-- Le styles -->
+    <link href="http://huodong.ustc.edu.cn/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="http://huodong.ustc.edu.cn/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="http://huodong.ustc.edu.cn/bootstrap/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{$baseurl}/bootstrap/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{$baseurl}/bootstrap/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="http://huodong.ustc.edu.cn/bootstrap/ico/apple-touch-icon-57-precomposed.png">
+    <script src="http://huodong.ustc.edu.cn/bootstrap/js/jquery.js"></script>
+    <script src="http://huodong.ustc.edu.cn/static/jquery.form.js"></script>
+  </head>
+  <body>
+   <div class="container-fluid" style="position:relative; width:1160px; margin:0 auto;">
+<form id="form" class="span8 form-horizontal" action="addhost.php" method="post">
+  <fieldset>
+    <div class="">
+      <label class="control-label" for="name"></label>
+      <div class="controls">
+        <h2>ServMon@LUG</h2>
+        <p>每分钟，我们会检测URL的状态，自动短信通知服务器故障。<br/>
+        为防止不稳定的服务导致短信泛滥，每个URL每24小时至多发送10条短信。</p>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="url">URL</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" name="url" />
+        <p class="help-block">目前只支持HTTP协议</p>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="includestr">特征字符串</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" name="includestr" />
+        <p class="help-block">指定网页中的一个特征字符串，若未找到此字符串（如发生数据库错误）时将报警。
+        <p class="help-block">留空表示不检查。精确匹配。UTF-8 编码，其他编码网页请使用非中文部分作为特征。</p>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="mobile">手机号</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" name="mobile" />
+        <p class="help-block">接收报警短信使用，每个手机号至多监控10个URL。</p>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="invitation">邀请码</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" name="invitation" />
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </fieldset>
+</form>
+<div class="span8">
+<pre>
+    switch($status) {
+        case 0: return '恢复正常';
+        case 1: return '未检测到特征字符串';
+        case 2: return '页面为空';
+        case 3: return '连接超时';
+        case 4: return 'HTTP状态码为'.$status_code;
+        case 5: return '无法连接';
+        case 6: return '服务器ping不通';
+        case 7: return 'DNS解析失败';
+        default: return '未知内部错误';
+    }
+</pre>
+</div>
+<div class="modal hide fade" id="mymodal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 id="alert-title"></h3>
+    </div>
+    <div class="modal-body" id="alert-body">
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>
+    </div>  
+</div>
+<script>
+$('#form').submit(function(){
+    $('#form').ajaxSubmit({
+        dataType: 'json',
+        success: function(obj) {
+            if (obj.status)
+                $("#alert-title").html('添加成功');
+            else
+                $("#alert-title").html('添加失败');
+            $('#alert-body').html(obj.msg);
+            $("#mymodal").modal("show");
+        },
+        error: function(e) {
+            $('#alert-title').html('服务器内部错误');
+            $('#alert-body').html('请联系我：bojieli AT gmail.com');
+            $("#mymodal").modal("show");
+        }
+    });
+    return false;
+});
+</script>
+      <hr>
+    </div><!--/.fluid-container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="/bootstrap/js/bootstrap-transition.js"></script>
+    <script src="/bootstrap/js/bootstrap-alert.js"></script>
+-->
+    <script src="http://huodong.ustc.edu.cn/bootstrap/js/bootstrap-modal.js"></script>
+<!--
+    <script src="/bootstrap/js/bootstrap-dropdown.js"></script>
+    <script src="/bootstrap/js/bootstrap-scrollspy.js"></script>
+    <script src="/bootstrap/js/bootstrap-tab.js"></script>
+    <script src="/bootstrap/js/bootstrap-tooltip.js"></script>
+    <script src="/bootstrap/js/bootstrap-popover.js"></script>
+    <script src="/bootstrap/js/bootstrap-button.js"></script>
+    <script src="/bootstrap/js/bootstrap-collapse.js"></script>
+    <script src="/bootstrap/js/bootstrap-carousel.js"></script>
+    <script src="/bootstrap/js/bootstrap-typeahead.js"></script>
+-->
+  </body>
+</html>
