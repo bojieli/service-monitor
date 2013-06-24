@@ -32,8 +32,8 @@ if ($row[0] > 0)
 
 $rs = mysql_query("SELECT COUNT(*) FROM host WHERE `mobile`='$mobile'");
 $row = mysql_fetch_array($rs);
-if ($row[0] >= 10)
-    error("每个手机号至多只能设置10个短信通知，谢谢！如果需要移除不用的URL，请联系我：bojieli@gmail.com");
+if ($row[0] >= 100)
+    error("每个手机号至多只能设置100个短信通知，谢谢！如果需要移除不用的URL，请联系我：bojieli@gmail.com");
 
 $includestr = addslashes(trim($_POST['includestr']));
 mysql_query("INSERT INTO host SET `url`='$url',`status`='0',`mobile`='$mobile',`includestr`='$includestr'");
