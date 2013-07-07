@@ -15,19 +15,22 @@ tr.red {background:#FE7777}
 <body>
 <table>
 <tr>
+  <th>ID</th>
   <th>URL</th>
   <th>状态</th>
 </tr>
 <?php
-$rs = mysql_query("SELECT url, status FROM host");
+$rs = mysql_query("SELECT id, url, status FROM host");
 while ($row = mysql_fetch_array($rs)) {
 	if ($row['status'] == 0)
 		$background = 'green';
 	else
 		$background = 'red';
 	$status = status2name($row['status']);
+    $id = $row['id'];
 	$url = htmlspecialchars($row['url']);
 	echo "<tr class=\"$background\">";
+    echo "<td>$id</td>";
 	echo "<td>$url</td>";
 	echo "<td>$status</td>";
 	echo "</tr>\n";
