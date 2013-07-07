@@ -20,7 +20,11 @@ tr.red {background:#FE7777}
   <th>状态</th>
 </tr>
 <?php
-$rs = mysql_query("SELECT host.url, host_log.status, FROM_UNIXTIME(host_log.time) as time, host_log.detail FROM host, host_log WHERE host.id = host_log.id ORDER BY host_log.time DESC");
+if (is_numeric($_GET['host']) && $_GET['host'] > 0)
+    $other_cond = "AND host.id=".$_GET['host'];
+else
+    $other_cond = '';
+$rs = mysql_query("SELECT host.url, host_log.status, FROM_UNIXTIME(host_log.time) as time, host_log.detail FROM host, host_log WHERE host.id = host_log.id $other_cond ORDER BY host_log.time DESC");
 while ($row = mysql_fetch_array($rs)) {
 	if ($row['status'] == 0)
 		$background = 'green';
