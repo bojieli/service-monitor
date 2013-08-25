@@ -7,6 +7,7 @@ CREATE TABLE host (
     `status` TINYINT(1) NOT NULL,
     `mobile` VARCHAR(20) NOT NULL,
     `includestr` VARCHAR(255) NOT NULL,
+    `lastprobe` INT(10) NOT NULL,
     PRIMARY KEY(`id`)
 );
 CREATE TABLE host_log (

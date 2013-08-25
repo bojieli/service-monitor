@@ -1,5 +1,6 @@
 <?php
-include_once "db.php";
+include "db.php";
+include "config.php";
 include "sms.php";
 include "testurl.php";
 date_default_timezone_set('Asia/Chongqing');
@@ -18,13 +19,24 @@ while(true) {
 }
 
 function test_all() {
+    global $conf;
     $rs = mysql_query("SELECT * FROM host");
+    while (!$rs) {
+        notify_change(0, "Cannot connect to database", $conf['admin_mobile'], 0);
+        include "db.php"; // reconnect the database
+        $rs = mysql_query("SELECT * FROM host");
+    }
     while ($row = mysql_fetch_array($rs)) {
         echo "Test URL ".$row['url']."\n";
         $status = test_url($row['url'], $row['includestr']);
+        update_last_probe($row['id']);
         if ($status != $row['status'])
             notify_change($row['id'], $row['url'], $row['mobile'], $status);
     }
+}
+
+function update_last_probe($id) {
+    mysql_query("UPDATE host SET lastprobe='".time()."' WHERE id='$id'");
 }
 
 function notify_change($id, $url, $mobile, $status) {

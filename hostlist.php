@@ -17,10 +17,11 @@ tr.red {background:#FE7777}
 <tr>
   <th>ID</th>
   <th>URL</th>
-  <th>状态</th>
+  <th>Status</th>
+  <th>Last Probe</th>
 </tr>
 <?php
-$rs = mysql_query("SELECT id, url, status FROM host");
+$rs = mysql_query("SELECT FROM_UNIXTIME(lastprobe) AS lastprobe, id, url, status FROM host");
 while ($row = mysql_fetch_array($rs)) {
 	if ($row['status'] == 0)
 		$background = 'green';
@@ -29,10 +30,12 @@ while ($row = mysql_fetch_array($rs)) {
 	$status = status2name($row['status']);
     $id = $row['id'];
 	$url = htmlspecialchars($row['url']);
+    $lastprobe = $row['lastprobe'];
 	echo "<tr class=\"$background\">";
     echo "<td>$id</td>";
 	echo "<td>$url</td>";
 	echo "<td>$status</td>";
+    echo "<td>$lastprobe</td>";
 	echo "</tr>\n";
 }
 ?>
