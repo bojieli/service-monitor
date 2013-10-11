@@ -22,7 +22,6 @@ function test_all() {
     global $conf;
     $rs = mysql_query("SELECT * FROM host");
     while (!$rs) {
-        notify_change(0, "Cannot connect to database", $conf['admin_mobile'], 0);
         include "db.php"; // reconnect the database
         $rs = mysql_query("SELECT * FROM host");
     }
