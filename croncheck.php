@@ -45,15 +45,22 @@ function notify_change($id, $url, $mobile, $status) {
     mysql_query("INSERT INTO host_log SET `id`='$id',`time`='".time()."',`status`='$status',`detail`='".addslashes($error_detail)."'");
     mysql_query("UPDATE host SET `status`='$status' WHERE `id`='$id'");
 
+    $msg = status2name($status).': '.shortenurl($url,80).' [ServMon@LUG]';
+    echo $msg."\n";
+
     // 24 hours maximum 10 msgs for each host
     $rs = mysql_query("SELECT COUNT(*) FROM sms_log WHERE `id`='$id' AND `time`>'".(time()-86400)."'");
-    $row = mysql_fetch_array($rs);
-    if ($row[0] > 10)
+    if (!$rs) {
+        echo "Database query failed, not sending SMS\n";
         return;
+    }
+    $row = mysql_fetch_array($rs);
+    if ($row[0] > 10) {
+        echo "SMS limit for ID $id exceeded, not sending SMS\n";
+        return;
+    }
     echo $row[0]."\n";
 
-    $msg = status2name($status).': '.shortenurl($url,80).' [ServMon@LUG]';
     sendSms($msg, array($id=>$mobile));
-    echo $msg."\n";
 }
 
