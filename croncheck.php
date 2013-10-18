@@ -1,4 +1,5 @@
 <?php
+// This file should be run every minute by crontab
 include "db.php";
 include "config.php";
 include "sms.php";
@@ -6,24 +7,16 @@ include "testurl.php";
 date_default_timezone_set('Asia/Chongqing');
 error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
 
-$INTERVAL = 60;
-$time = 0;
-
-while(true) {
-    if (time() - $time > $INTERVAL) {
-        $time = time();
-        test_all();
-    } else {
-        sleep(1);
-    }
-}
+echo "Test start: ".date('Y-m-d H:i:s')."\n";
+test_all();
+echo "Test end: ".date('Y-m-d H:i:s')."\n\n";
 
 function test_all() {
     global $conf;
     $rs = mysql_query("SELECT * FROM host");
-    while (!$rs) {
-        include "db.php"; // reconnect the database
-        $rs = mysql_query("SELECT * FROM host");
+    if (!$rs) {
+        echo "Error Connecting database\n";
+        return;
     }
     while ($row = mysql_fetch_array($rs)) {
         echo "Test URL ".$row['url']."\n";
