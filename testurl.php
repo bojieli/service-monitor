@@ -46,7 +46,7 @@ function test_url($url, $includestr, $retry=0) {
                 global $status_code;
                 $info = curl_getinfo($ch_curl);
                 $status_code = $info['http_code'];
-		$error_detail = json_encode($info);
+		        $error_detail = json_encode($info);
                 return 4; 
             case 28: // CURLE_OPERATION_TIMEDOUT
                 if ($retry < 2) // retry it
@@ -77,8 +77,7 @@ function test_url($url, $includestr, $retry=0) {
                         return 6; // ping failed
                 }
             default:
-                echo curl_errno($ch_curl);
-		$error_detail = "curl errno: ".curl_errno($ch_curl);
+		        $error_detail = "curl errno: ".curl_errno($ch_curl);
                 return -1; // unknown error
         }
     }
@@ -89,7 +88,8 @@ function ping($host) {
     $ping = Net_Ping::factory();
     $ping->setArgs(array('count' => 3, 'timeout' => 1));
     if (PEAR::isError($ping)) {
-        echo $ping->getMessage();
+        global $error_detail;
+        $error_detail = $ping->getMessage();
         return false;
     } else {
         $result = $ping->ping($host);
