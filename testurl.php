@@ -27,6 +27,7 @@ function test_url($url, $includestr, $retry=0) {
     curl_setopt($ch_curl, CURLOPT_RETURNTRANSFER, true );
     curl_setopt($ch_curl, CURLOPT_FAILONERROR, 1);
     curl_setopt($ch_curl, CURLOPT_URL, $url);
+    curl_setopt($ch_curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
    
     $page = curl_exec($ch_curl);
 
