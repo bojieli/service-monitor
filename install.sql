@@ -14,6 +14,7 @@ CREATE TABLE host_log (
     `id` INT(10) NOT NULL,
     `time` INT(10) NOT NULL,
     `status` INT(10) NOT NULL,
+    `response_time` INT(10) NOT NULL,
     KEY key_id (`id`)
 );
 CREATE TABLE sms_log (

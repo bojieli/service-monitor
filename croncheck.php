@@ -28,7 +28,8 @@ function test_all() {
 }
 
 function update_last_probe($id) {
-    mysql_query("UPDATE host SET lastprobe='".time()."' WHERE id='$id'");
+    global $elapsed_time;
+    mysql_query("UPDATE host SET lastprobe='".time()."',response_time=".(int)($elapsed_time*1000)." WHERE id='$id'");
 }
 
 function notify_change($id, $url, $mobile, $status) {

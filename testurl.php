@@ -1,6 +1,7 @@
 <?php
 $status_code = 0;
 $error_detail = "";
+$elapsed_time = 0;
 
 function status2name($status) {
     global $status_code;
@@ -17,6 +18,11 @@ function status2name($status) {
     }
 }
 
+function microtime_float() {
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
+}
+
 function test_url($url, $includestr, $retry=0) {
     global $error_detail;
     $error_detail = ""; // initialize
@@ -29,7 +35,11 @@ function test_url($url, $includestr, $retry=0) {
     curl_setopt($ch_curl, CURLOPT_URL, $url);
     curl_setopt($ch_curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
    
+    $time_start = microtime_float();
     $page = curl_exec($ch_curl);
+    $time_end = microtime_float();
+    global $elapsed_time;
+    $elapsed_time = $time_end - $time_start;
 
     if (!curl_errno($ch_curl)) {
         if ($includestr == '' || strstr($page, $includestr))
