@@ -41,6 +41,8 @@ function notify_change($id, $url, $mobile, $status) {
     $msg = status2name($status).': '.shortenurl($url,80).' [ServMon@LUG]';
     echo $msg."\n";
 
+    mail('servmon@blog.ustc.edu.cn', $msg, "Detail: $error_detail");
+
     // 24 hours maximum 10 msgs for each host
     $rs = mysql_query("SELECT COUNT(*) FROM sms_log WHERE `id`='$id' AND `time`>'".(time()-86400)."'");
     if (!$rs) {
