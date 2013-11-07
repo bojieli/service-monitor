@@ -23,7 +23,7 @@ function test_all() {
         $status = test_url($row['url'], $row['includestr']);
         update_last_probe($row['id']);
         if ($status != $row['status'])
-            notify_change($row['id'], $row['url'], $row['mobile'], $status);
+            notify_change($row['id'], $row['url'], $row['mobile'], $row['email'], $status);
     }
 }
 
@@ -32,7 +32,7 @@ function update_last_probe($id) {
     mysql_query("UPDATE host SET lastprobe='".time()."',response_time=".(int)($elapsed_time*1000)." WHERE id='$id'");
 }
 
-function notify_change($id, $url, $mobile, $status) {
+function notify_change($id, $url, $mobile, $email, $status) {
     if (!is_numeric($id) || !is_numeric($status))
         return;
     global $error_detail;
@@ -42,8 +42,9 @@ function notify_change($id, $url, $mobile, $status) {
     $msg = status2name($status).': '.shortenurl($url,80).' [ServMon@LUG]';
     echo $msg."\n";
 
-    mail('servmon@blog.ustc.edu.cn', $msg, "Detail: $error_detail");
+    mail($email, $msg, "Detail: $error_detail");
 
+/*
     // 24 hours maximum 10 msgs for each host
     $rs = mysql_query("SELECT COUNT(*) FROM sms_log WHERE `id`='$id' AND `time`>'".(time()-86400)."'");
     if (!$rs) {
@@ -58,5 +59,6 @@ function notify_change($id, $url, $mobile, $status) {
     echo $row[0]."\n";
 
     sendSms($msg, array($id=>$mobile));
+    */
 }
 

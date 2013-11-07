@@ -6,6 +6,7 @@ CREATE TABLE host (
     `url` VARCHAR(255) NOT NULL,
     `status` TINYINT(1) NOT NULL,
     `mobile` VARCHAR(20) NOT NULL,
+    `email` VARCHAR(256) NOT NULL,
     `includestr` VARCHAR(255) NOT NULL,
     `lastprobe` INT(10) NOT NULL,
     PRIMARY KEY(`id`)
