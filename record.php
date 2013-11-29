@@ -20,7 +20,7 @@ tr.red {background:#FE7777}
   <th>状态</th>
 </tr>
 <?php
-if (is_numeric($_GET['host']) && $_GET['host'] > 0)
+if (isset($_GET['host']) && is_numeric($_GET['host']) && $_GET['host'] > 0)
     $other_cond = "AND host.id=".$_GET['host'];
 else
     $other_cond = '';
