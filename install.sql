@@ -9,6 +9,7 @@ CREATE TABLE host (
     `email` VARCHAR(256) NOT NULL,
     `includestr` VARCHAR(255) NOT NULL,
     `lastprobe` INT(10) NOT NULL,
+    `response_time` INT(10) NOT NULL,
     PRIMARY KEY(`id`)
 );
 CREATE TABLE host_log (
@@ -16,6 +17,7 @@ CREATE TABLE host_log (
     `time` INT(10) NOT NULL,
     `status` INT(10) NOT NULL,
     `response_time` INT(10) NOT NULL,
+    `detail` TEXT,
     KEY key_id (`id`)
 );
 CREATE TABLE sms_log (
