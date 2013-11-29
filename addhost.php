@@ -26,16 +26,15 @@ if ($row[0] > 0)
 $rs = mysql_query("SELECT COUNT(*) FROM host WHERE `email`='$email'");
 $row = mysql_fetch_array($rs);
 if ($row[0] >= 100)
-    error("每个 Email 至多只能设置100个短信通知，谢谢！如果需要移除不用的URL，请联系我：lug@ustc.edu.cn");
+    error("每个 Email 至多只能设置100个通知，谢谢！如果需要移除不用的URL，请联系我：lug@ustc.edu.cn");
 
 $includestr = addslashes(trim($_POST['includestr']));
 mysql_query("INSERT INTO host SET `url`='$url',`status`='0',`email`='$email',`includestr`='$includestr'");
 if (!($id = mysql_insert_id()))
     error("内部错误，添加失败，请重试。");
 
-include "sms.php";
 $msg = '您已成功添加URL: '.shortenurl($url,80).' [ServMon@LUG]';
-mail($email, $msg);
+mail($email, $msg, "RT");
 
 success("添加成功，您将收到一封邮件通知。");
 
