@@ -33,7 +33,7 @@ mysql_query("INSERT INTO host SET `url`='$url',`status`='0',`email`='$email',`in
 if (!($id = mysql_insert_id()))
     error("内部错误，添加失败，请重试。");
 
-$msg = '您已成功添加URL: '.shortenurl($url,80).' [ServMon@LUG]';
+$msg = "您已成功添加URL: $url [ServMon@LUG]";
 mail($email, $msg, "RT");
 
 success("添加成功，您将收到一封邮件通知。");

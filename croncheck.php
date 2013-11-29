@@ -2,7 +2,6 @@
 // This file should be run every minute by crontab
 include "db.php";
 include "config.php";
-include "sms.php";
 include "testurl.php";
 date_default_timezone_set('Asia/Chongqing');
 error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
@@ -39,7 +38,7 @@ function notify_change($id, $url, $mobile, $email, $status) {
     mysql_query("INSERT INTO host_log SET `id`='$id',`time`='".time()."',`status`='$status',`detail`='".addslashes($error_detail)."'");
     mysql_query("UPDATE host SET `status`='$status' WHERE `id`='$id'");
 
-    $msg = status2name($status).': '.shortenurl($url,80).' [ServMon@LUG]';
+    $msg = status2name($status).": $url [ServMon@LUG]";
     echo $msg."\n";
 
     mail($email, $msg, "Detail: $error_detail");
