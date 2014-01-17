@@ -20,9 +20,10 @@ tr.red {background:#FE7777}
   <th>Status</th>
   <th>Last Probe</th>
   <th>Response Time (ms)</th>
+  <th>Last Status Change</th>
 </tr>
 <?php
-$rs = mysql_query("SELECT FROM_UNIXTIME(lastprobe) AS lastprobe, id, url, status, response_time FROM host");
+$rs = mysql_query("SELECT FROM_UNIXTIME(lastprobe) AS lastprobe, id, url, status, response_time, FROM_UNIXTIME(last_status_change) AS lastchange FROM host");
 while ($row = mysql_fetch_array($rs)) {
 	if ($row['status'] == 0)
 		$background = 'green';
@@ -39,6 +40,7 @@ while ($row = mysql_fetch_array($rs)) {
 	echo "<td>$status</td>";
     echo "<td>$lastprobe</td>";
     echo "<td align=\"right\">$response_time</td>";
+    echo "<td>".$row['lastchange']."</td>";
 	echo "</tr>\n";
 }
 ?>

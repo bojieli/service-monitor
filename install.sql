@@ -10,6 +10,7 @@ CREATE TABLE host (
     `includestr` VARCHAR(255) NOT NULL,
     `lastprobe` INT(10) NOT NULL,
     `response_time` INT(10) NOT NULL,
+    `last_status_change` INT(10) NOT NULL,
     PRIMARY KEY(`id`)
 );
 CREATE TABLE host_log (

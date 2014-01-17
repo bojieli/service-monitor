@@ -21,7 +21,8 @@ function test_all() {
         echo "Test URL ".$row['url']."\n";
         $status = test_url($row['url'], $row['includestr']);
         update_last_probe($row['id']);
-        if ($status != $row['status'])
+        $orig_status = mysql_result(mysql_query("SELECT status FROM host WHERE id='" . $row['id'] . "'"), 0);
+        if ($status != $orig_status)
             notify_change($row['id'], $row['url'], $row['mobile'], $row['email'], $status);
     }
 }
@@ -35,8 +36,8 @@ function notify_change($id, $url, $mobile, $email, $status) {
     if (!is_numeric($id) || !is_numeric($status))
         return;
     global $error_detail;
+    mysql_query("UPDATE host SET `status`='$status', `last_status_change`='".time()."' WHERE `id`='$id'");
     mysql_query("INSERT INTO host_log SET `id`='$id',`time`='".time()."',`status`='$status',`detail`='".addslashes($error_detail)."'");
-    mysql_query("UPDATE host SET `status`='$status' WHERE `id`='$id'");
 
     $msg = status2name($status).": $url [ServMon@LUG]";
     echo $msg."\n";
