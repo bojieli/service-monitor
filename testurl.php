@@ -52,6 +52,9 @@ function test_url($url, $includestr, $retry=0) {
         } else
             return 1; // STR not found
     } else {
+        if ($retry < 2) // retry up to 3 times
+            return test_url($url, $includestr, $retry+1);
+
         switch (curl_errno($ch_curl)) {
             case 22: // HTTP status code error
                 global $status_code;
@@ -60,33 +63,21 @@ function test_url($url, $includestr, $retry=0) {
 		        $error_detail = json_encode($info);
                 return 4; 
             case 28: // CURLE_OPERATION_TIMEDOUT
-                if ($retry < 2) // retry it
-                    return test_url($url, $includestr, $retry+1);
-                else {
-                    $real_url = curl_getinfo($ch_curl, CURLINFO_EFFECTIVE_URL);
-                    if (ping(getipfromurl($real_url)))
-                        return 3; // Connection timeout
-                    else 
-                        return 6; // ping failed
-                }
+                $real_url = curl_getinfo($ch_curl, CURLINFO_EFFECTIVE_URL);
+                if (ping(getipfromurl($real_url)))
+                    return 3; // Connection timeout
+                else 
+                    return 6; // ping failed
             case 6: // CURLE_COULDNT_RESOLVE_HOST
-                if ($retry < 2) // retry it
-                    return test_url($url, $includestr, $retry+1);
-                else {
-                    $host = parse_url($url, PHP_URL_HOST); 
-                    $error_detail = shell_exec("dig +trace $host");
-                    return 7;
-		}
+                $host = parse_url($url, PHP_URL_HOST); 
+                $error_detail = shell_exec("dig +trace $host");
+                return 7;
             case 7: // CURLE_COULDNT_CONNECT
-                if ($retry < 2) // retry it
-                    return test_url($url, $includestr, $retry+1);
-                else {
-                    $real_url = curl_getinfo($ch_curl, CURLINFO_EFFECTIVE_URL);
-                    if (ping(getipfromurl($real_url)))
-                        return 5; // cannot connect
-                    else 
-                        return 6; // ping failed
-                }
+                $real_url = curl_getinfo($ch_curl, CURLINFO_EFFECTIVE_URL);
+                if (ping(getipfromurl($real_url)))
+                    return 5; // cannot connect
+                else 
+                    return 6; // ping failed
             default:
 		        $error_detail = "curl errno: ".curl_errno($ch_curl);
                 return -1; // unknown error
