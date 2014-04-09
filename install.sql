@@ -29,3 +29,4 @@ CREATE TABLE sms_log (
     `status` TINYINT(1) NOT NULL,
     KEY key_id (`id`)
 );
+create table full_log (id int(10), time int(10), status int(10), response_time int(10), key key_id_time (id, time));

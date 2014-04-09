@@ -20,11 +20,17 @@ function test_all() {
     while ($row = mysql_fetch_array($rs)) {
         echo "Test URL ".$row['url']."\n";
         $status = test_url($row['url'], $row['includestr']);
+        save_full_log($row['id'], $status);
         update_last_probe($row['id']);
         $orig_status = mysql_result(mysql_query("SELECT status FROM host WHERE id='" . $row['id'] . "'"), 0);
         if ($status != $orig_status)
             notify_change($row['id'], $row['url'], $row['mobile'], $row['email'], $status);
     }
+}
+
+function save_full_log($id, $status) {
+    global $elapsed_time;
+    mysql_query("INSERT INTO full_log SET id=$id, status=$status, time=".time().", response_time=".(int)($elapsed_time*1000));
 }
 
 function update_last_probe($id) {
