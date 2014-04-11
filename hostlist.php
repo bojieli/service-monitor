@@ -8,12 +8,13 @@ include "testurl.php";
 <style>
 body {font-family: "Segoe UI", Ubuntu, Tahoma, sans-serif;}
 td {padding:1px 5px 1px 5px}
-tr.green {background:#83F57F}
-tr.red {background:#FE7777}
+tr.green td {background:#83F57F; color:#000}
+tr.red td {background:#FE7777; color:#000}
 </style>
 </head>
 <body>
-<table>
+<table id="sort">
+<thead>
 <tr>
   <th>ID</th>
   <th>URL</th>
@@ -22,6 +23,8 @@ tr.red {background:#FE7777}
   <th>Response Time (ms)</th>
   <th>Last Status Change</th>
 </tr>
+</thead>
+</tbody>
 <?php
 $rs = mysql_query("SELECT FROM_UNIXTIME(lastprobe) AS lastprobe, id, url, status, response_time, FROM_UNIXTIME(last_status_change) AS lastchange FROM host");
 while ($row = mysql_fetch_array($rs)) {
@@ -44,6 +47,15 @@ while ($row = mysql_fetch_array($rs)) {
 	echo "</tr>\n";
 }
 ?>
+</tbody>
 </table>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.13.3/jquery.tablesorter.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.13.3/css/theme.default.css" />
+<script>
+$(document).ready(function(){ 
+        $("#sort").tablesorter(); 
+}); 
+</script>
 </body>
 </html>
