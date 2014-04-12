@@ -72,7 +72,7 @@ $(function () {
                 spacingRight: 20
             },
             title: {
-                    text: 'HTTP Response Time of <?=addslashes($url)?>'
+                    text: 'HTTP Response Time of <?=addslashes($url)?> [<?=$id?>]'
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
