@@ -23,8 +23,13 @@ if (!isset($_GET['id'])) {
         plot($row['id'], $start_time);
     }
 } else {
-    $id = intval($_GET['id']);
-    plot($id, $start_time);
+    $ids = explode(' ', $_GET['id']);
+    foreach ($ids as $id) {
+        $id = intval($id);
+        if ($id > 0) {
+            plot($id, $start_time);
+        }
+    }
 }
 
 function plot($id, $start_time) {
