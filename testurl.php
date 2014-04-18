@@ -23,7 +23,7 @@ function microtime_float() {
     return ((float)$usec + (float)$sec);
 }
 
-function test_url($url, $includestr, $retry=0) {
+function test_url($url, $includestr, $ip_version, $retry=0) {
     global $error_detail;
     $error_detail = ""; // initialize
 
@@ -33,7 +33,10 @@ function test_url($url, $includestr, $retry=0) {
     curl_setopt($ch_curl, CURLOPT_RETURNTRANSFER, true );
     curl_setopt($ch_curl, CURLOPT_FAILONERROR, 1);
     curl_setopt($ch_curl, CURLOPT_URL, $url);
-    curl_setopt($ch_curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+    if ($ip_version == 4)
+        curl_setopt($ch_curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+    else if ($ip_version == 6)
+        curl_setopt($ch_curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V6);
    
     $time_start = microtime_float();
     $page = curl_exec($ch_curl);
@@ -46,14 +49,14 @@ function test_url($url, $includestr, $retry=0) {
             return 0; // OK
         else if (strlen(trim($page)) == 0) {
             if ($retry < 2) // retry it
-                return test_url($url, $includestr, $retry+1);
+                return test_url($url, $includestr, $ip_version, $retry+1);
             else
                 return 2; // empty page
         } else
             return 1; // STR not found
     } else {
         if ($retry < 2) // retry up to 3 times
-            return test_url($url, $includestr, $retry+1);
+            return test_url($url, $includestr, $ip_version, $retry+1);
 
         switch (curl_errno($ch_curl)) {
             case 22: // HTTP status code error

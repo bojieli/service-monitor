@@ -11,7 +11,7 @@ if (empty($_POST['url']))
 if (empty($_POST['email']))
     error("请填写 Email!");
 
-$retval = test_url($_POST['url'], $_POST['includestr']);
+$retval = test_url($_POST['url'], $_POST['includestr'], $_POST['ip_version']);
 if ($retval != 0) {
     error("抱歉，您指定的URL不正常，错误信息为：".status2name($retval));
 }
@@ -29,7 +29,8 @@ if ($row[0] >= 100)
     error("每个 Email 至多只能设置100个通知，谢谢！如果需要移除不用的URL，请联系我：lug@ustc.edu.cn");
 
 $includestr = addslashes(trim($_POST['includestr']));
-mysql_query("INSERT INTO host SET `url`='$url',`status`='0',`email`='$email',`includestr`='$includestr'");
+$ip_version = intval($_POST['ip_version']);
+mysql_query("INSERT INTO host SET `url`='$url',`status`='0',`email`='$email',`includestr`='$includestr',`ip_version`='$ip_version'");
 if (!($id = mysql_insert_id()))
     error("内部错误，添加失败，请重试。");
 

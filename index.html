@@ -35,7 +35,17 @@
       <label class="control-label" for="url">URL</label>
       <div class="controls">
         <input type="text" class="input-xlarge" name="url" />
-        <p class="help-block">目前只支持HTTP协议</p>
+        <p class="help-block">目前只支持 HTTP(S) 协议</p>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="url">IP 协议版本</label>
+      <div class="controls">
+        <select class="input-xlarge" name="ip_version">
+          <option value="0" selected="selected">自动</option>
+          <option value="4">IPv4</option>
+          <option value="6">IPv6</option>
+        </select>
       </div>
     </div>
     <div class="control-group">

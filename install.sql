@@ -11,6 +11,7 @@ CREATE TABLE host (
     `lastprobe` INT(10) NOT NULL,
     `response_time` INT(10) NOT NULL,
     `last_status_change` INT(10) NOT NULL,
+    `ip_version` TINYINT(1),
     PRIMARY KEY(`id`)
 );
 CREATE TABLE host_log (

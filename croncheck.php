@@ -19,7 +19,7 @@ function test_all() {
     }
     while ($row = mysql_fetch_array($rs)) {
         echo "Test URL ".$row['url']."\n";
-        $status = test_url($row['url'], $row['includestr']);
+        $status = test_url($row['url'], $row['includestr'], $row['ip_version']);
         save_full_log($row['id'], $status);
         update_last_probe($row['id']);
         $orig_status = mysql_result(mysql_query("SELECT status FROM host WHERE id='" . $row['id'] . "'"), 0);

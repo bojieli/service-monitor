@@ -18,6 +18,7 @@ tr.red td {background:#FE7777; color:#000}
 <tr>
   <th>ID</th>
   <th>URL</th>
+  <th>IPv?</th>
   <th>Status</th>
   <th>Last Probe</th>
   <th>Response Time (ms)</th>
@@ -26,7 +27,7 @@ tr.red td {background:#FE7777; color:#000}
 </thead>
 </tbody>
 <?php
-$rs = mysql_query("SELECT FROM_UNIXTIME(lastprobe) AS lastprobe, id, url, status, response_time, FROM_UNIXTIME(last_status_change) AS lastchange FROM host");
+$rs = mysql_query("SELECT FROM_UNIXTIME(lastprobe) AS lastprobe, id, url, ip_version, status, response_time, FROM_UNIXTIME(last_status_change) AS lastchange FROM host");
 while ($row = mysql_fetch_array($rs)) {
 	if ($row['status'] == 0)
 		$background = 'green';
@@ -35,11 +36,13 @@ while ($row = mysql_fetch_array($rs)) {
 	$status = status2name($row['status']);
     $id = $row['id'];
 	$url = htmlspecialchars($row['url']);
+    $ip_version = $row['ip_version'] == 4 ? "IPv4" : ($row['ip_version'] == 6 ? "IPv6" : "Auto");
     $lastprobe = $row['lastprobe'];
     $response_time = $row['response_time'];
 	echo "<tr class=\"$background\">";
     echo "<td>$id</td>";
 	echo "<td>$url</td>";
+    echo "<td>$ip_version</td>";
 	echo "<td>$status</td>";
     echo "<td>$lastprobe</td>";
     echo "<td align=\"right\">$response_time</td>";
