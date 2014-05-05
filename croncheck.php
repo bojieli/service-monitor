@@ -24,7 +24,7 @@ function test_all() {
         update_last_probe($row['id']);
         $orig_status = mysql_result(mysql_query("SELECT status FROM host WHERE id='" . $row['id'] . "'"), 0);
         if ($status != $orig_status)
-            notify_change($row['id'], $row['url'], $row['mobile'], $row['email'], $status);
+            notify_change($row['id'], $row['url'], $row['ip_version'], $row['mobile'], $row['email'], $status);
     }
 }
 
@@ -38,7 +38,7 @@ function update_last_probe($id) {
     mysql_query("UPDATE host SET lastprobe='".time()."',response_time=".(int)($elapsed_time*1000)." WHERE id='$id'");
 }
 
-function notify_change($id, $url, $mobile, $email, $status) {
+function notify_change($id, $url, $ip_version, $mobile, $email, $status) {
     if (!is_numeric($id) || !is_numeric($status))
         return;
     global $error_detail;
@@ -48,7 +48,7 @@ function notify_change($id, $url, $mobile, $email, $status) {
     $msg = status2name($status).": $url [ServMon@LUG]";
     echo $msg."\n";
 
-    mail($email, $msg, "Detail: $error_detail");
+    mail($email, $msg, "IP Version: ".($ip_version > 0 ? $ip_version : 'Auto')."\nDetail: $error_detail");
 
 /*
     // 24 hours maximum 10 msgs for each host
