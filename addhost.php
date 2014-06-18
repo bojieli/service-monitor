@@ -1,6 +1,7 @@
 <?php
 include "db.php";
 include "testurl.php";
+include "mail.inc.php";
 
 if(empty($_POST))
     exit();
@@ -35,7 +36,7 @@ if (!($id = mysql_insert_id()))
     error("内部错误，添加失败，请重试。");
 
 $msg = "您已成功添加URL: $url [ServMon@LUG]";
-mail($email, $msg, "RT");
+utf8_mail($email, $msg, "RT");
 
 success("添加成功，您将收到一封邮件通知。");
 

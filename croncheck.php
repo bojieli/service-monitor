@@ -1,8 +1,8 @@
 <?php
 // This file should be run every minute by crontab
 include "db.php";
-include "config.php";
 include "testurl.php";
+include "mail.inc.php";
 date_default_timezone_set('Asia/Chongqing');
 error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
 
@@ -48,7 +48,7 @@ function notify_change($id, $url, $ip_version, $mobile, $email, $status) {
     $msg = status2name($status).": $url [ServMon@LUG]";
     echo $msg."\n";
 
-    mail($email, $msg, "IP Version: ".($ip_version > 0 ? $ip_version : 'Auto')."\nDetail: $error_detail");
+    utf8_mail($email, $msg, "IP Version: ".($ip_version > 0 ? $ip_version : 'Auto')."\nDetail: $error_detail");
 
 /*
     // 24 hours maximum 10 msgs for each host
