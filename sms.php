@@ -16,9 +16,13 @@ function sendSms($msg,$mobiles)
         return array('done'=>0,'failed'=>count($mobiles));
 
     //远程调用
-    $client->wsClientSetCharset('UTF-8');
-    $client->wsCsLogin('huodong','hzbjlsjr2012');
-    $messageId=$client->wsCreateMessage($messageTitle='',$msg,$messageFromAddress="",$messageFromName="",$messageContentFormat="plaintext");
+    try {
+    	$client->wsClientSetCharset('UTF-8');
+    	$client->wsCsLogin('huodong','hzbjlsjr2012');
+    	$messageId=$client->wsCreateMessage($messageTitle='',$msg,$messageFromAddress="",$messageFromName="",$messageContentFormat="plaintext");
+    } catch(Exception $e) {
+	return $e;
+    }
     if ($messageId == 'soap_fault')
         return 'soap_fault';
     $i=0;
@@ -26,8 +30,12 @@ function sendSms($msg,$mobiles)
 
     foreach($mobiles as $id => $mobile)
     {
-        $client->wsMessageAddReceiver($messageId,'mobile',$mobile,'sms',$messagePriority=1,$sendTime=null);
-        $re=$client->wsMessageSend($messageId);
+	try {
+        	$client->wsMessageAddReceiver($messageId,'mobile',$mobile,'sms',$messagePriority=1,$sendTime=null);
+        	$re=$client->wsMessageSend($messageId);
+	} catch(Exception $e) {
+		return $e;
+	}
         if($re)
         {
             $i++;
